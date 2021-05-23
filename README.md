@@ -62,7 +62,7 @@ _To discus features, bugs or share your own project that utilize code in this re
 **exit**    | exit the CLI                 |                                       | *no equivalent*
 **help**    | prints this help info        |                                       | *no equivalent*
 **sysinfo** | prints system info           |                                       | `uos.uname()` *pruned*
-**list**    | lists the current directory  |                                       | `uos.listdir()`
+**list**    | lists the current directory  |                                       | `uos.listdir()` *sorted*
 **clr**     | clear the terminal           |                                       | `print('\n'*100)`
 **cd**      | change directory             | cd path (../ is not supported)        | `uos.chdir()`
 **print**   | print requested file         | print fileName [opt: \'r\' or \'rb\'] | *no equivalent*
