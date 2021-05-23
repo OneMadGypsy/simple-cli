@@ -57,18 +57,18 @@ _To discus features, bugs or share your own project that utilize code in this re
  
  <br />
 
- Cmd    | Description                  | Examples                              |
---------|------------------------------|---------------------------------------|
-exit    | exit the CLI                 |                                       |
-help    | prints this help info        |                                       |
-sysinfo | prints system info           |                                       |
-list    | lists the current directory  |                                       |
-clr     | clear the terminal           |                                       |
-cd      | change directory             | cd path (../ is not supported)        |
-print   | print requested file         | print fileName [opt: \'r\' or \'rb\'] |
-mkdir   | creates a new directory      | mkdir dirName                         |
-del     | delete a file or folder      | del fileOrDirName                     |
-rename  | rename a file                | rename oldname newname                |
+ Cmd        | Description                  | Examples                              |
+------------|------------------------------|---------------------------------------|
+**exit**    | exit the terminal            |                                       |
+**help**    | prints this help info        |                                       |
+**sysinfo** | prints system info           |                                       |
+**list**    | lists the current directory  |                                       |
+**clr**     | clear the terminal           |                                       |
+**cd**      | change directory             | cd path (../ is not supported)        |
+**print**   | print requested file         | print fileName [opt: \'r\' or \'rb\'] |
+**mkdir**   | creates a new directory      | mkdir dirName                         |
+**del**     | delete a file or folder      | del fileOrDirName                     |
+**rename**  | rename a file                | rename oldname newname                |
 
 <br />
  
