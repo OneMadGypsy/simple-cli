@@ -53,7 +53,7 @@ _To discus features, bugs or share your own project that utilize code in this re
  
  <br />
  
->It needs to be noted that this is a very simple CLI. If you consider the following commands to perform operation to or from the directory you are currently in, then you shouldn't have any issues. Attempting to treat this like it will understand or properly handle complex paths will likely be futile. I have aspirations to improve this, eventually. It's current state isn't bad, though. It performs well if you treat it like what it is... a rudimentary CLI that simplifies some filesystem operations on embedded systems.
+>Whereas the `Same As` section of the below table is accurate, very few commands are identical to their equivalent. This is because returned information has formatting or pruning applied and/or may trigger another command as a convenience.
  
  <br />
 
