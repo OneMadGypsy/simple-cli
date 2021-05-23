@@ -4,6 +4,27 @@ This is a very simple command line interface written in micropython. This allows
 
 ![CLI Example Image](https://i.imgur.com/Busi9DL.png "CLI Example")
 
+<br />
+
+------
+
+<br />
+
+## Ports:
+
+### cli.py
+>This can be uploaded directly to the board, but is intended to be used as a frozen module. For information regarding how to setup the sdk and freeze a module you can refer to [this post](https://www.raspberrypi.org/forums/viewtopic.php?f=146&t=306449#p1862108) on the Raspberry Pi forum.
+
+
+### cli.mpy
+>This is a cross-compiled version of `cli.py`. It is intended to be uploaded to your board as you would any normal `.py` script.
+
+<br />
+
+-------
+
+<br />
+
 ## Docs:
 
 <br />
@@ -14,6 +35,10 @@ This is a very simple command line interface written in micropython. This allows
  ------|--------|--------
  clear | bool   | True
  user  | str    | 'user'
+ 
+ <br />
+ 
+ ------
  
  <br />
  
@@ -37,7 +62,12 @@ print   | print requested file         | print fileName (opt: \'r\' or \'rb\') |
 mkdir   | creates a new directory      | mkdir dirName                         |
 del     | delete a file or folder      | del fileOrDirName                     |
 
- <br />
+<br />
+ 
+------
+ 
+<br />
+ 
   
 ## Usage:
 
