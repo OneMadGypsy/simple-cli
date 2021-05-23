@@ -59,13 +59,13 @@ _To discus features, bugs or share your own project that utilize code in this re
 
  Cmd        | Description                  | Examples                              | Same As
 ------------|------------------------------|---------------------------------------|--------------------------------
-**exit**    | exit the CLI                 |                                       |
-**help**    | prints this help info        |                                       |
-**sysinfo** | prints system info           |                                       | `uos.uname()` (pruned)
+**exit**    | exit the CLI                 |                                       | *no equivalent*
+**help**    | prints this help info        |                                       | *no equivalent*
+**sysinfo** | prints system info           |                                       | `uos.uname()` *pruned*
 **list**    | lists the current directory  |                                       | `uos.listdir()`
-**clr**     | clear the terminal           |                                       |
+**clr**     | clear the terminal           |                                       | *no equivalent*
 **cd**      | change directory             | cd path (../ is not supported)        | `uos.chdir()`
-**print**   | print requested file         | print fileName [opt: \'r\' or \'rb\'] |
+**print**   | print requested file         | print fileName [opt: \'r\' or \'rb\'] | *no equivalent*
 **mkdir**   | creates a new directory      | mkdir dirName                         | `uos.mkdir()`
 **del**     | delete a file or folder      | del fileOrDirName                     | `uos.remove()` and `uos.rmdir()`
 **rename**  | rename a file                | rename oldname newname                | `uos.rename()`
