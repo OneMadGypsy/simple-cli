@@ -92,7 +92,7 @@ CLI(clear=True, user='yourName')
 ```
 
 
-**idea**    _~ start CLI on button press_
+**start CLI on button press**
 
 
 ```python
