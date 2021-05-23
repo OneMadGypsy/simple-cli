@@ -91,3 +91,16 @@ from cli import CLI
 CLI(clear=True, user='yourName')
 ```
 
+
+**idea** *~ start CLI on button press*
+
+
+```python
+from cli import CLI
+from machine import Pin
+
+cli = Pin(3, Pin.IN, Pin.PULL_DOWN)
+cli.irq(lambda p:CLI(user="Michael"), Pin.IRQ_FALLING)
+
+```
+
