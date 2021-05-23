@@ -59,7 +59,7 @@ _To discus features, bugs or share your own project that utilize code in this re
 
  Cmd    | Description                  | Examples                              |
 --------|------------------------------|---------------------------------------|
-exit    | exit the terminal            |                                       |
+exit    | exit the CLI                 |                                       |
 help    | prints this help info        |                                       |
 sysinfo | prints system info           |                                       |
 list    | lists the current directory  |                                       |
