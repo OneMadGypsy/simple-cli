@@ -53,7 +53,7 @@ _To discus features, bugs or share your own project that utilize code in this re
  
  <br />
  
->Whereas the `Same As` section of the below table is accurate, very few commands are identical to their equivalent. This is because returned information has formatting or pruning applied and/or may trigger another command as a convenience.
+>Whereas the **`Same As`** section of the below table is accurate, very few commands are identical to their equivalent. This is because returned information has formatting or pruning applied and/or may trigger another command as a convenience.
  
  <br />
 
