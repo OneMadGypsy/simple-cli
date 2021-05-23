@@ -84,6 +84,6 @@ rename  | rename a file                | rename oldname newname                |
 ```python
 from cli import CLI
 
-CLI(clear=True', user='yourName')
+CLI(clear=True, user='yourName')
 ```
 
