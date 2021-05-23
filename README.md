@@ -38,10 +38,10 @@ _To discus features, bugs or share your own project that utilize code in this re
 
 **CLI(`clear`, `user`)**
 
- Arg   | Type   | Description                    | Default
- ------|--------|--------------------------------|--------
- clear | bool   | clears the terminal on startup | True
- user  | str    | personalize `user@sysname:~/`  | 'user'
+ Arg       | Type   | Description                    | Default
+ ----------|--------|--------------------------------|--------
+ **clear** | bool   | clears the terminal on startup | True
+ **user**  | str    | personalize `user@sysname:~/`  | 'user'
  
  <br />
  
@@ -59,7 +59,7 @@ _To discus features, bugs or share your own project that utilize code in this re
 
  Cmd        | Description                  | Examples                              |
 ------------|------------------------------|---------------------------------------|
-**exit**    | exit the terminal            |                                       |
+**exit**    | exit the CLI                 |                                       |
 **help**    | prints this help info        |                                       |
 **sysinfo** | prints system info           |                                       |
 **list**    | lists the current directory  |                                       |
