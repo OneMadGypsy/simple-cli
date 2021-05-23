@@ -1,10 +1,10 @@
 import uos, math
  
 #__> CLI
-_CMDS        = ('exit', 'help', 'list', 'clr', 'cd', 'print', 'mkdir', 'del')
-_DESC        = ('exit the terminal', 'prints this help info', 'lists the current directory', 'clear the terminal', 
-                'change directory', 'print requested file','creates a new directory', 'delete a file or folder ')
-_EXS         = ('', '', '', '', 'cd path (../ is not supported)', 'print fileName [opt: \'r\' or \'rb\']', 'mkdir dirName', 'del fileOrDirName')
+_CMDS        = ('exit', 'help', 'sysinfo', 'list', 'clr', 'cd', 'print', 'mkdir', 'del', 'rename')
+_DESC        = ('exit the terminal', 'prints this help info', 'print system info', 'lists the current directory', 'clear the terminal', 
+                'change directory', 'print requested file','creates a new directory', 'delete a file or folder', 'rename a file')
+_EXS         = ('', '', '', '', '', 'cd path (../ is not supported)', 'print fileName [opt: \'r\' or \'rb\']', 'mkdir dirName', 'del fileOrDirName', 'rename oldname newname')
 _STAT_FLDR   = const(0x4000)
 _STAT_FILE   = const(0x8000)
 _HEADER      = '\n{:<48}\n| {:<25} | {:<16} |\n{:<48}'
@@ -13,18 +13,20 @@ _SEP         = '{:<48}'.format('-'*48)
 _DIRECTORY   = '| {:<44} |'
 _FILEHEADER  = '\n{}\n {}/{} ~ {}b \n{}\n'
 _COMBINE     = '{}{}'
-_HELP        = ' {:<6}: {:<30} {}'
+_HELP        = ' {:<8}: {:<30} {}'
+_SYSINFO     = ' {:>7}: {}'
       
 class CLI(object):
     def __init__(self, clear:bool=True, user:str='user') -> None:
         print('' if not clear else '\n'*100)
         
+        host = uos.uname().sysname
+        
         while True:
-            cmdline = input("{}@pico:~{} $ ".format(user, uos.getcwd()))
+            cmdline = input("{}@{}:~{} $ ".format(user, host, uos.getcwd()))
             chain   = cmdline.split(' ')
             cmd     = chain.pop(0)
             path    = uos.getcwd() if len(chain) < 1 else chain.pop(0)
-            fmt     = 'r' if len(chain) < 1 else chain.pop(0)
             
             try:
                 mode = uos.stat(path)[0]
@@ -48,6 +50,7 @@ class CLI(object):
                         uos.chdir(path)
                 elif cmd == 'print':
                     if mode & _STAT_FILE:
+                        fmt = 'r' if len(chain) < 1 else chain.pop(0)
                         CLI.__print(path, fmt)
                 elif cmd == 'del':
                     if mode & _STAT_FILE:
@@ -56,7 +59,18 @@ class CLI(object):
                     elif mode & _STAT_FLDR:
                         uos.rmdir(path)
                         CLI.__list(uos.getcwd())
-        
+                elif cmd == 'rename':
+                    if mode & _STAT_FILE:
+                        newname = None if len(chain) < 1 else chain.pop(0)
+                        if newname:
+                            uos.rename(path, newname)
+                            CLI.__list(uos.getcwd())
+                elif cmd == 'sysinfo':
+                    print('\n SYSINFO:\n')
+                    print(_SYSINFO.format('sysname', uos.uname().sysname))
+                    print(_SYSINFO.format('μpython', uos.uname().version))
+                    print(_SYSINFO.format('machine', uos.uname().machine))
+                    print()
         
     @staticmethod
     def __read(path:str, format='r', buffsize:int=0x200):
@@ -115,4 +129,5 @@ class CLI(object):
                 if out:
                     print(out)
         print(_SEP, '\n')
+
 
