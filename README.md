@@ -71,6 +71,10 @@ _To discus features, bugs or share your own project that utilize code in this re
 **rename**  | rename a file                | rename oldname newname                | `uos.rename()`
 
 <br />
+
+**`mkdir`, `del` and `rename` will automatically list the current directory when their operation completes** 
+
+<br />
  
 ------
  
