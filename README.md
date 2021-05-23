@@ -63,7 +63,7 @@ _To discus features, bugs or share your own project that utilize code in this re
 **help**    | prints this help info        |                                       | *no equivalent*
 **sysinfo** | prints system info           |                                       | `uos.uname()` *pruned*
 **list**    | lists the current directory  |                                       | `uos.listdir()`
-**clr**     | clear the terminal           |                                       | *no equivalent*
+**clr**     | clear the terminal           |                                       | `print('\n'*100)`
 **cd**      | change directory             | cd path (../ is not supported)        | `uos.chdir()`
 **print**   | print requested file         | print fileName [opt: \'r\' or \'rb\'] | *no equivalent*
 **mkdir**   | creates a new directory      | mkdir dirName                         | `uos.mkdir()`
