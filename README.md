@@ -38,10 +38,10 @@ _To discus features, bugs or share your own project that utilize code in this re
 
 **CLI(`clear`, `user`)**
 
- Arg   | Type   | Default
- ------|--------|----------
- clear | bool   | True
- user  | str    | 'user'
+ Arg   | Type   | Description                    | Default
+ ------|--------|--------------------------------|--------
+ clear | bool   | clears the terminal on startup | True
+ user  | str    | personalize `user@sysname:~/`  | 'user'
  
  <br />
  
@@ -84,6 +84,6 @@ rename  | rename a file                | rename oldname newname                |
 ```python
 from cli import CLI
 
-CLI(user='yourName')
+CLI(clear=True', user='yourName')
 ```
 
