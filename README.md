@@ -91,8 +91,16 @@ _To discus features, bugs or share your own project that utilize code in this re
 ```python
 from cli import CLI
 
-CLI(clear=True, user='yourName')
+CLI(user='yourName') #auto-clears
 ```
+
+
+```python
+from cli import CLI
+
+CLI(False, 'yourName') #wont auto-clear
+```
+
 
 
 **on button release**
