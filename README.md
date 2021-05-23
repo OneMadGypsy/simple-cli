@@ -57,18 +57,18 @@ _To discus features, bugs or share your own project that utilize code in this re
  
  <br />
 
- Cmd        | Description                  | Examples                              
-------------|------------------------------|---------------------------------------
-**exit**    | exit the CLI                 |                                       
-**help**    | prints this help info        |                                       
-**sysinfo** | prints system info           |                                       
-**list**    | lists the current directory  |                                       
-**clr**     | clear the terminal           |                                       
-**cd**      | change directory             | cd path (../ is not supported)        
-**print**   | print requested file         | print fileName [opt: \'r\' or \'rb\'] 
-**mkdir**   | creates a new directory      | mkdir dirName                         
-**del**     | delete a file or folder      | del fileOrDirName                     
-**rename**  | rename a file                | rename oldname newname                
+ Cmd        | Description                  | Examples                              | Same As
+------------|------------------------------|---------------------------------------|--------------------------------
+**exit**    | exit the CLI                 |                                       |
+**help**    | prints this help info        |                                       |
+**sysinfo** | prints system info           |                                       | `uos.uname()` (pruned)
+**list**    | lists the current directory  |                                       | `uos.listdir()`
+**clr**     | clear the terminal           |                                       |
+**cd**      | change directory             | cd path (../ is not supported)        | `uos.chdir()`
+**print**   | print requested file         | print fileName [opt: \'r\' or \'rb\'] |
+**mkdir**   | creates a new directory      | mkdir dirName                         | `uos.mkdir()`
+**del**     | delete a file or folder      | del fileOrDirName                     | `uos.remove()` and `uos.rmdir()`
+**rename**  | rename a file                | rename oldname newname                | `uos.rename()`
 
 <br />
  
