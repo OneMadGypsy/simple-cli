@@ -85,6 +85,9 @@ _To discus features, bugs or share your own project that utilize code in this re
 
  <br />
  
+**simple**
+
+
 ```python
 from cli import CLI
 
@@ -92,7 +95,7 @@ CLI(clear=True, user='yourName')
 ```
 
 
-**start CLI on button press**
+**on button release**
 
 
 ```python
