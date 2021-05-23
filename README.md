@@ -1,6 +1,6 @@
 # simple-cli
 
-This is a very simple command line interface written in micropython. This allows you to perform a handful of file/folder operations on your microcontroller's file system and/or any mounted drive that is connected to it, from the REPL.
+This is a very simple command line interface written in micropython. This simplifies a handful of filesystem operations on your device and any mounted drive that is connected to it, Currently, it is mostly a wrapper that turns `uos` into a list of commands, and formats and/or prunes it's return data.
 
 ![CLI Example Image](https://i.imgur.com/Busi9DL.png "CLI Example")
 
