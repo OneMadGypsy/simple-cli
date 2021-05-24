@@ -4,7 +4,7 @@ This is a very simple command line interface written in micropython. This simpli
 
 <br />
 
-![CLI Example Image](https://i.imgur.com/pU0TYCq.png "CLI Example")
+![CLI Example Image](https://i.imgur.com/IbYYUAM.png "CLI Example")
 
 
 ### Community:
