@@ -2,7 +2,7 @@
 
 This is a very simple command line interface written in micropython. This simplifies a handful of filesystem operations on your device and any mounted drive that is connected to it, Currently, it is mostly a wrapper that turns `uos` into a list of commands, and formats, sorts and/or prunes it's return data. This script may be more useful as a groundwork for you to expand than a viable tool. The script is pretty clean and simple.
 
-![CLI Example Image](https://i.imgur.com/Busi9DL.png "CLI Example")
+![CLI Example Image](https://i.imgur.com/pU0TYCq.png "CLI Example")
 
 
 ### Community:
@@ -61,18 +61,18 @@ _To discus features, bugs or share your own project that utilize code in this re
 ------------|------------------------------|---------------------------------------|--------------------------------
 **exit**    | exit the CLI                 |                                       | *no equivalent*
 **help**    | prints this help info        |                                       | *no equivalent*
-**sysinfo** | prints system info           |                                       | `uos.uname()` *pruned*
-**list**    | lists the current directory  |                                       | `uos.listdir()` *sorted*
-**clr**     | clear the terminal           |                                       | `print('\n'*100)`
-**cd**      | change directory             | cd path (../ is not supported)        | `uos.chdir()`
-**print**   | print requested file         | print fileName [opt: \'r\' or \'rb\'] | *no equivalent*
+**sysinfo** | prints system info           |                                       | `uos.uname()` (*pruned*)
+**list**    | lists the current directory  |                                       | `uos.listdir()` (*sorted*)
+**clr**     | clear the terminal           |                                       | *no equivalent*
+**cd**      | change directory             | cd path                               | `uos.chdir()`
+**print**   | print requested file         | print fileName [r | rb]               | *no equivalent*
 **mkdir**   | creates a new directory      | mkdir dirName                         | `uos.mkdir()`
-**del**     | delete a file or folder      | del fileOrDirName                     | `uos.remove()` and `uos.rmdir()`
+**del**     | delete a file or folder      | del fileOrDirName                     | *no equivalent*
 **rename**  | rename a file                | rename oldname newname                | `uos.rename()`
 
 <br />
 
-**`mkdir`, `del` and `rename` will automatically list the current directory when their operation completes** 
+**`cd`, `mkdir`, `del` and `rename` will automatically list the current directory when their operation completes** 
 
 <br />
  
