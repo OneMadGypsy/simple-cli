@@ -127,7 +127,7 @@ cli.irq(lambda p:CLI(user="yourName"), Pin.IRQ_FALLING) #on release
  
 ## Theme Ideas:
 
->Here are a few alternated theme that can be copy/pasted over lines 21 through 26
+>Here are a few alternate themes that can be copy/pasted over lines 21 through 26
 
 <br />
 
