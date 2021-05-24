@@ -129,7 +129,7 @@ cli.irq(lambda p:CLI(user="yourName"), Pin.IRQ_FALLING) #on release
 
 >Here are a few alternated theme that can be copy/pasted over lines 21 through 26
 
-< br />
+<br />
 
 **Ice King**
 
@@ -168,7 +168,7 @@ _ALT_FG     = _FG_GREEN
 _ALT_BG     = _BG_BLACK
 ```
 
-< br />
+<br />
 
 **Surf**
 
