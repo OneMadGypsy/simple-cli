@@ -161,7 +161,7 @@ _ALT_BG     = _BG_BLACK
 
 <br />
 
-### Surf
+### Snow Capped
 
 ```python
 _MAIN       = _FG_WHITE
