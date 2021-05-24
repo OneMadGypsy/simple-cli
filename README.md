@@ -131,7 +131,7 @@ cli.irq(lambda p:CLI(user="yourName"), Pin.IRQ_FALLING) #on release
 
 <br />
 
-**Happy Jack**
+### Happy Jack
 
 ```python
 _MAIN       = _FG_BLACK 
@@ -146,7 +146,7 @@ _ALT_BG     = _BG_BLACK
 
 <br />
 
-**Mardi Gras**
+### Mardi Gras
 
 ```python
 _MAIN       = _FG_MAGENTA
@@ -161,7 +161,7 @@ _ALT_BG     = _BG_BLACK
 
 <br />
 
-**Surf**
+### Surf
 
 ```python
 _MAIN       = _FG_WHITE
@@ -176,7 +176,7 @@ _ALT_BG     = _BG_BLACK
 
 <br />
 
-**Minimalist**
+### Minimalist
 
 ```python
 _MAIN       = _FG_WHITE
