@@ -131,19 +131,6 @@ cli.irq(lambda p:CLI(user="yourName"), Pin.IRQ_FALLING) #on release
 
 <br />
 
-**Ice King**
-
-```python
-_MAIN       = _FG_CYAN 
-_BRIGHT_FG  = _FG_WHITE
-_FG         = _FG_BLACK
-_BG         = _BG_WHITE
-_ALT_FG     = _FG_WHITE
-_ALT_BG     = _BG_BLACK
-```
-
-<br />
-
 **Happy Jack**
 
 ```python
