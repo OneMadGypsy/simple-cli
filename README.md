@@ -65,7 +65,7 @@ _To discus features, bugs or share your own project that utilize code in this re
 **list**    | lists the current directory  |                                       | `uos.listdir()` (*sorted*)
 **clr**     | clear the terminal           |                                       | *no equivalent*
 **cd**      | change directory             | cd path                               | `uos.chdir()`
-**print**   | print requested file         | print fileName [r | rb]               | *no equivalent*
+**print**   | print requested file         | print fileName [r, rb]                | *no equivalent*
 **mkdir**   | creates a new directory      | mkdir dirName                         | `uos.mkdir()`
 **del**     | delete a file or folder      | del fileOrDirName                     | *no equivalent*
 **rename**  | rename a file                | rename oldname newname                | `uos.rename()`
