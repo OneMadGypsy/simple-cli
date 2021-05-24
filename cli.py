@@ -1,5 +1,6 @@
 import uos
 from micropython import const
+from usys import path as syspath
  
 #_> STAT BITMASKS
 _STAT_FLDR  = const(0x4000)
@@ -30,9 +31,10 @@ _FMT2       = '\033[{};{}m'
 _FMT3       = '\033[{};{};{}m'
 _FMT4       = '\033[{};{};{};{}m'
 _COMBINE    = '{}{}'
+_FULLPATH   = '{}/{}'
 
 #_> STYLESHEET
-_E          = _FMT2.format(_BOLD, _FG_RED)                          # error
+_E          = _FMT3.format(_BOLD, _BLINK, _FG_RED)                  # error
 _D          = _FMT1.format(_NORMAL)                                 # default
 _CH         = _FMT4.format(_BOLD_ULINE, _BOLD, _MAIN, _BG_BLACK)    # contrast header
 _C1         = _FMT3.format(_BOLD  , _BRIGHT_FG, _BG    )            # contrast 1
@@ -43,16 +45,14 @@ _C2_        = _FMT3.format(_NORMAL,    _ALT_FG, _ALT_BG)            # subcontras
 #__> entry
 _EHEADER    = '\n{} {:<25} {} {} {:<12} {}'.format(_CH, 'files', _D, _CH,'byte size', _D)
 _ENTRY      = '{} {} {} {} {} {}'
-_ENTRY1     = _ENTRY.format(_C1, '{:<25}', _D, _C1_, '{:>12}', _D)
-_ENTRY2     = _ENTRY.format(_C2, '{:<25}', _D, _C2_, '{:>12}', _D)
-_ENTRIES    = (_ENTRY1, _ENTRY2)
+_ENTRIES    = (_ENTRY.format(_C1, '{:<25}', _D, _C1_, '{:>12}', _D),
+               _ENTRY.format(_C2, '{:<25}', _D, _C2_, '{:>12}', _D))
 
 #__> help
 _HHEADER    = '\n{} {:<8} {} {} {:<30} {} {} {:<33} {}'.format(_CH, 'cmd', _D, _CH,'description', _D, _CH, 'example', _D)
 _HELP       = '{} {} {} {} {} {} {} {} {}'
-_HELP1      = _HELP.format(_C1, '{:<8}', _D, _C1_, '{:<30}', _D, _C1_, '{:<33}', _D)
-_HELP2      = _HELP.format(_C2, '{:<8}', _D, _C2_, '{:<30}', _D, _C2_, '{:<33}', _D)
-_HELPS      = (_HELP1, _HELP2)
+_HELPS      = (_HELP.format(_C1, '{:<8}', _D, _C1_, '{:<30}', _D, _C1_, '{:<33}', _D),
+               _HELP.format(_C2, '{:<8}', _D, _C2_, '{:<30}', _D, _C2_, '{:<33}', _D))
 
 #_> sysinfo
 _SHEADER    = '\n{} {:<77}{}'.format(_CH, 'sysinfo', _D)
@@ -60,42 +60,53 @@ _SYSINFO1   = '{} {}{} {} {}{}'.format(_C1, '{:<8}', _D, _C1_, '{:<67}', _D)
 _SYSINFO2   = '{} {}{} {} {}{}'.format(_C2, '{:<8}', _D, _C2_, '{:<67}', _D)
 
 #_> print
-_FILE       = '\n{} {}{} bytes {}'.format(_CH, '{}/{}', '{:>50}', _FMT3.format(_NORMAL, _FG_WHITE, _BG_BLACK))
+_FILE       = '\n{} {}{} bytes {}'.format(_CH, {}, '{:>50}', _FMT3.format(_NORMAL, _FG_WHITE, _BG_BLACK))
+
+#_> find
+_IHEADER    = '\n{} {}{}'.format(_CH, '{:<47}', _D)
+_ITEM       = '{} {}{}'
+_ITEMS      = (_ITEM.format(_C1, '{:<47}', _D),
+               _ITEM.format(_C2, '{:<47}', _D))
 
 #_> continuous
-_ERROR      = '\n{}{} {}/{} ({}) {}\n'.format(_E, '{}', '{}', '{}', '{}', _D)
+_GHEADER    = '\n{} {:<77}{}'.format(_CH, 'sysinfo', _D)
+_ERROR      = '\n{}{} {} ({}) {}\n'.format(_E, '{}', '{}', '{}', _D)
 _CMDLINE    = '{}{}{}:{}{} $ {}'.format(_FMT2.format(_BOLD, _MAIN), '{}@{}', _D, _FMT3.format(_BOLD, _SHADE, _MAIN), '~{}', _D)
 
 #__> CLI
-_CMDS       = ('exit', 'help', 'sysinfo', 'list', 'clr', 'cd', 'print', 'mkdir', 'del', 'rename')
-_AUTOLIST   = ('cd', 'mkdir', 'del', 'rename')
+_CMDS       = ('exit', 'help', 'sysinfo', 'list', 'clr', 'cd', 'print', 'mkdir', 'del', 'rename', 'find', 'syspath')
+_AUTOLIST   = ('mkdir', 'del', 'rename', 'cd')
 
 _DESC       = ('exit the CLI', 'prints this help info', 'print system info', 'lists the current directory', 'clear the terminal', 
-               'change directory', 'print requested file','creates a new directory', 'delete a file or folder', 'rename a file')
-_EXS        = ('', '', '', '', '', 'cd path', 'print fileName [r | rb]', 'mkdir dirName', 'del fileOrDirName', 'rename oldname newname')
+               'change directory', 'print requested file','creates a new directory', 'delete a file or folder', 'rename a file', 
+               'find all with term from cwd', 'print or [modify] syspath')
+_EXS        = ('', '', '', '', '', 'cd path', 'print fileName [r | rb]', 'mkdir dirName', 'del fileOrDirName', 'rename oldname newname', 'find term', 'syspath [add | del]')
 
       
 class CLI(object):
     #__> COMMAND LINE INTERFACE
     def __init__(self, clear:bool=True, user:str='user') -> None:
         print('' if not clear else '\n'*100)
-        
         host = uos.uname().sysname
         CLI.__list(uos.getcwd())
         
         while True:
             args = input(_CMDLINE.format(user, host, uos.getcwd())).split(' ')
             cmd  = args.pop(0)
-            path = uos.getcwd() if len(args) < 1 else args.pop(0)
+            term = uos.getcwd() if len(args) < 1 else args.pop(0)
             alt  = None         if len(args) < 1 else args.pop(0)
             
             try:
-                mode = uos.stat(path)[0]
+                mode = uos.stat(term)[0]
             except OSError as err:
-                if cmd == 'mkdir':
-                    uos.mkdir(path)
+                if   cmd == 'mkdir'  : uos.mkdir(term)
+                elif cmd == 'find'   : (print(_IHEADER.format('found')), CLI.__find(term), print())
+                elif cmd == 'syspath': 
+                    CLI.__syspath(term, alt)
+                    continue
                 else:
-                    print(_ERROR.format('Path Error', uos.getcwd()[1:], path, err))
+                    full_path = _FULLPATH.format(uos.getcwd, term).replace('//', '/')
+                    print(_ERROR.format('Path Error', full_path, err))
                     continue
                     
             if cmd in _CMDS:
@@ -103,11 +114,12 @@ class CLI(object):
                 elif cmd == 'clr'    : print('\n'*100)
                 elif cmd == 'help'   : CLI.__help()
                 elif cmd == 'sysinfo': CLI.__sysinfo()
-                elif cmd == 'del'    : CLI.__delete(path, mode)
-                elif cmd == 'list'   : CLI.__list(path)              if mode & _STAT_FLDR else None
-                elif cmd == 'print'  : CLI.__print(path, alt)        if mode & _STAT_FILE else None
-                elif cmd == 'cd'     : uos.chdir(path)               if mode & _STAT_FLDR else None
-                elif cmd == 'rename' : uos.rename(path, alt) if alt and mode & _STAT_FILE else None
+                elif cmd == 'del'    : CLI.__delete(term, mode)
+                elif cmd == 'syspath': CLI.__syspath(term, alt)
+                elif cmd == 'list'   : CLI.__list(term)              if mode & _STAT_FLDR else None
+                elif cmd == 'print'  : CLI.__print(term, alt)        if mode & _STAT_FILE else None
+                elif cmd == 'cd'     : uos.chdir(term)               if mode & _STAT_FLDR else None
+                elif cmd == 'rename' : uos.rename(term, alt) if alt and mode & _STAT_FILE else None
                     
             if cmd in _AUTOLIST:
                 CLI.__list(uos.getcwd())
@@ -120,7 +132,8 @@ class CLI(object):
         try:
             file = open(path, 'rb')
         except OSError as err:
-            print(_ERROR.format('Path Error', uos.getcwd()[1:], path, err))
+            full_path = _FULLPATH.format(uos.getcwd(), item).replace('//', '/')
+            print(_ERROR.format('Path Error', full_path, err))
             return None
         
         while True:
@@ -177,7 +190,8 @@ class CLI(object):
     def __print(path:str, fmt:str) -> None:
         fmt = fmt if fmt else 'r'
         hold = ''
-        print(_FILE.format(uos.getcwd()[1:], path, uos.stat(path)[6]))
+        full_path = _FULLPATH.format(uos.getcwd(), path).replace('//', '/')
+        print(_FILE.format(full_path, uos.stat(path)[6]))
         for output in CLI.__read(path, fmt):
             if not output is None:
                 #__> New Line Juggler
@@ -192,6 +206,7 @@ class CLI(object):
     #__> Recursively Deletes Directories And Contents Side-stepping EACCESS Issues With Populated Directories
     @staticmethod
     def __delete(path:str, mode:int) -> None:
+        info = ''
         try:
             if mode & _STAT_FILE:
                 uos.remove(path)
@@ -204,6 +219,41 @@ class CLI(object):
                 uos.chdir(cwd)
                 uos.rmdir(path)
         except OSError as err:
-            print(_ERROR.format('Cannot Delete', uos.getcwd()[1:], path, err))
+            full_path = _FULLPATH.format(uos.getcwd(), item).replace('//', '/')
+            print(_ERROR.format('Cannot Delete', full_path, err))
+      
+    #__> Find All Items Containing Term Recursing from CWD
+    @staticmethod
+    def __find(term:str, i:int=0) -> None:
+        cwd = uos.getcwd()
+        for n, item in enumerate(uos.listdir()):
+            full_path = _FULLPATH.format(cwd, item).replace('//', '/')
+            if term in item:
+                print(_ITEMS[(n+i)%2].format(full_path))
+            uos.chdir(cwd)
+            if uos.stat(item)[0] & _STAT_FLDR:
+                uos.chdir(item)
+                CLI.__find(term, n+i)
+        uos.chdir(cwd)
+        
+    #__> Pring, Add or Remove From Syspath
+    @staticmethod
+    def __syspath(term:str, path:str) -> None:
+        if term in ('add', 'del'):
+            if path:
+                full_path = _FULLPATH.format(uos.getcwd(), path).replace('//', '/')
+                try:
+                    if uos.stat(full_path)[0] & _STAT_FLDR:
+                        if   term == 'add': syspath.append(full_path)
+                        elif term == 'del': syspath.remove(full_path)
+                except OSError as err:
+                    print(_ERROR.format('Bad Path', full_path, err))
+        else:            
+            print(_IHEADER.format('syspaths'))
+            for n, path in enumerate(syspath):
+                print(_ITEMS[n%2].format(path))
+            print()
+        
+        
         
         
