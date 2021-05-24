@@ -60,10 +60,10 @@ _To discus features, bugs or share your own project that utilize code in this re
  <br />
 
  Cmd        | Description                  | Examples                              | Same As
-------------|------------------------------|---------------------------------------|--------------------------------
+------------|------------------------------|---------------------------------------|---------------------------------------
 **exit**    | exit the CLI                 |                                       | *no equivalent*
 **help**    | prints this help info        |                                       | *no equivalent*
-**sysinfo** | prints system info           |                                       | `uos.uname()` (*pruned*)
+**sysinfo** | prints system info           |                                       | `uos.uname()`   (*pruned*)
 **list**    | lists the current directory  |                                       | `uos.listdir()` (*sorted*)
 **clr**     | clear the terminal           |                                       | *no equivalent*
 **cd**      | change directory             | cd path                               | `uos.chdir()`
@@ -71,6 +71,8 @@ _To discus features, bugs or share your own project that utilize code in this re
 **mkdir**   | creates a new directory      | mkdir dirName                         | `uos.mkdir()`
 **del**     | delete a file or folder      | del fileOrDirName                     | *no equivalent*
 **rename**  | rename a file                | rename oldname newname                | `uos.rename()`
+**find**    | find all with term from cwd  | find term                             | *no equivalent*
+**syspath** | print or [modify] syspath    | syspath [add, del]                    | `sys.path` [`.append()`, `.remove()`]
 
 <br />
 
