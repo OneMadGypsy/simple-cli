@@ -127,7 +127,7 @@ cli.irq(lambda p:CLI(user="yourName"), Pin.IRQ_FALLING) #on release
  
 ## Theme Ideas:
 
->Here are a few alternate themes that can be copy/pasted over lines 21 through 26
+>Here are a few alternate themes that can be copy/pasted over lines 21 through 26. If you create an interesting theme [share it here](https://github.com/OneMadGypsy/simple-cli/discussions/1) so others can enjoy it.
 
 <br />
 
@@ -142,7 +142,7 @@ _ALT_FG     = _FG_RED
 _ALT_BG     = _BG_BLACK
 ```
 
-[Happy Jack Example](https://i.imgur.com/UVmYvEX.png "Happy Jack Theme")
+![Happy Jack Example](https://i.imgur.com/UVmYvEX.png "Happy Jack Theme")
 
 <br />
 
@@ -157,7 +157,7 @@ _ALT_FG     = _FG_GREEN
 _ALT_BG     = _BG_BLACK
 ```
 
-[Mardi Gras Example](https://i.imgur.com/rzKK3se.png "Mardi Gras Theme")
+![Mardi Gras Example](https://i.imgur.com/rzKK3se.png "Mardi Gras Theme")
 
 <br />
 
@@ -172,7 +172,7 @@ _ALT_FG     = _FG_WHITE
 _ALT_BG     = _BG_BLACK
 ```
 
-[Surf Example](https://i.imgur.com/N7EpGFq.png "Surf Theme")
+![Surf Example](https://i.imgur.com/N7EpGFq.png "Surf Theme")
 
 <br />
 
@@ -187,4 +187,4 @@ _ALT_FG     = _FG_WHITE
 _ALT_BG     = _BG_BLACK
 ```
 
-[Minimalist Example](https://i.imgur.com/Vt5d84L.png "Minimalist Theme")
+![Minimalist Example](https://i.imgur.com/Vt5d84L.png "Minimalist Theme")
