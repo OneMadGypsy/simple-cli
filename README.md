@@ -142,6 +142,8 @@ _ALT_FG     = _FG_RED
 _ALT_BG     = _BG_BLACK
 ```
 
+[Happy Jack Example](https://i.imgur.com/UVmYvEX.png "Happy Jack Theme")
+
 <br />
 
 **Mardi Gras**
@@ -154,6 +156,8 @@ _BG         = _BG_GREEN
 _ALT_FG     = _FG_GREEN  
 _ALT_BG     = _BG_BLACK
 ```
+
+[Mardi Gras Example](https://i.imgur.com/rzKK3se.png "Mardi Gras Theme")
 
 <br />
 
@@ -168,6 +172,8 @@ _ALT_FG     = _FG_WHITE
 _ALT_BG     = _BG_BLACK
 ```
 
+[Surf Example](https://i.imgur.com/N7EpGFq.png "Surf Theme")
+
 <br />
 
 **Minimalist**
@@ -180,3 +186,5 @@ _BG         = _BG_BLACK
 _ALT_FG     = _FG_WHITE
 _ALT_BG     = _BG_BLACK
 ```
+
+[Minimalist Example](https://i.imgur.com/Vt5d84L.png "Minimalist Theme")
