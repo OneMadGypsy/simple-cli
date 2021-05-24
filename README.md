@@ -1,6 +1,6 @@
 # simple-cli
 
-This is a very simple command line interface written in micropython. This simplifies a handful of filesystem operations on your device and any mounted drive that is connected to it, Currently, it is mostly a wrapper that turns `uos` into a list of commands, and formats, sorts and/or prunes it's return data, but it has a few other tricks that `uos` doesn't provide. This is only properly supported by a linux terminal. Windows will understand the formatting but interpret it differently. If you would like to retheme the interface, go to line 19 in the code and read the comments. I made it as simple as I possibly could. Changing just 5 lines can redress the entire app.
+This is a very simple command line interface written in micropython. This simplifies a handful of filesystem operations on your device and any mounted drive that is connected to it, Currently, it is mostly a wrapper that turns `uos` into a list of commands, and formats, sorts and/or prunes it's return data, but it has a few other tricks that `uos` doesn't provide. This is only properly supported by a linux terminal. Windows will understand the formatting but interpret it differently. If you would like to retheme the interface, go to line 20 in the code and read the comments. I made it as simple as I possibly could. Changing just 5 lines can redress the entire app.
 
 <br />
 
@@ -119,3 +119,72 @@ cli.irq(lambda p:CLI(user="yourName"), Pin.IRQ_FALLING) #on release
 
 ```
 
+<br />
+ 
+------
+ 
+<br />
+ 
+## Theme Ideas:
+
+>Here are a few alternated theme that can be copy/pasted over lines 21 through 26
+
+< br />
+
+**Ice King**
+'''python
+_MAIN       = _FG_CYAN 
+_BRIGHT_FG  = _FG_WHITE
+_FG         = _FG_BLACK
+_BG         = _BG_WHITE
+_ALT_FG     = _FG_WHITE
+_ALT_BG     = _BG_BLACK
+'''
+
+< br />
+
+**Happy Jack**
+'''python
+_MAIN       = _FG_BLACK 
+_BRIGHT_FG  = _FG_YELLOW
+_FG         = _FG_BLACK 
+_BG         = _BG_RED
+_ALT_FG     = _FG_RED   
+_ALT_BG     = _BG_BLACK
+'''
+
+< br />
+
+**Mardi Gras**
+'''python
+_MAIN       = _FG_MAGENTA
+_BRIGHT_FG  = _FG_YELLOW 
+_FG         = _FG_BLACK  
+_BG         = _BG_GREEN
+_ALT_FG     = _FG_GREEN  
+_ALT_BG     = _BG_BLACK
+'''
+
+< br />
+
+**Surf**
+'''python
+_MAIN       = _FG_WHITE
+_BRIGHT_FG  = _FG_BLUE 
+_FG         = _FG_WHITE
+_BG         = _BG_BLUE
+_ALT_FG     = _FG_WHITE
+_ALT_BG     = _BG_BLACK
+'''
+
+< br />
+
+**Minimalist**
+'''python
+_MAIN       = _FG_WHITE
+_BRIGHT_FG  = _FG_WHITE
+_FG         = _FG_WHITE
+_BG         = _BG_BLACK
+_ALT_FG     = _FG_WHITE
+_ALT_BG     = _BG_BLACK
+'''
