@@ -132,6 +132,7 @@ cli.irq(lambda p:CLI(user="yourName"), Pin.IRQ_FALLING) #on release
 < br />
 
 **Ice King**
+
 '''python
 _MAIN       = _FG_CYAN 
 _BRIGHT_FG  = _FG_WHITE
@@ -144,47 +145,50 @@ _ALT_BG     = _BG_BLACK
 < br />
 
 **Happy Jack**
-'''python
+
+```python
 _MAIN       = _FG_BLACK 
 _BRIGHT_FG  = _FG_YELLOW
 _FG         = _FG_BLACK 
 _BG         = _BG_RED
 _ALT_FG     = _FG_RED   
 _ALT_BG     = _BG_BLACK
-'''
+```
 
 < br />
 
 **Mardi Gras**
-'''python
+
+```python
 _MAIN       = _FG_MAGENTA
 _BRIGHT_FG  = _FG_YELLOW 
 _FG         = _FG_BLACK  
 _BG         = _BG_GREEN
 _ALT_FG     = _FG_GREEN  
 _ALT_BG     = _BG_BLACK
-'''
+```
 
 < br />
 
 **Surf**
-'''python
+
+```python
 _MAIN       = _FG_WHITE
 _BRIGHT_FG  = _FG_BLUE 
 _FG         = _FG_WHITE
 _BG         = _BG_BLUE
 _ALT_FG     = _FG_WHITE
 _ALT_BG     = _BG_BLACK
-'''
+```
 
 < br />
 
 **Minimalist**
-'''python
+```python
 _MAIN       = _FG_WHITE
 _BRIGHT_FG  = _FG_WHITE
 _FG         = _FG_WHITE
 _BG         = _BG_BLACK
 _ALT_FG     = _FG_WHITE
 _ALT_BG     = _BG_BLACK
-'''
+```
