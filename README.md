@@ -1,7 +1,6 @@
 # simple-cli
 
-This is a very simple command line interface written in micropython. This simplifies a handful of filesystem operations on your device and any mounted drive that is connected to it, Currently, it is mostly a wrapper that turns `uos` into a list of commands, and formats, sorts and/or prunes it's return data. This script may be more useful as a groundwork for you to expand than a viable tool. The script is pretty clean and simple.
-
+This is a very simple command line interface written in micropython. This simplifies a handful of filesystem operations on your device and any mounted drive that is connected to it, Currently, it is mostly a wrapper that turns `uos` into a list of commands, and formats, sorts and/or prunes it's return data, but it has a few other tricks that `uos` doesn't provide. This is not currently compatible with anything other than a linux terminal. If you would like to retheme the interface, go to line 19 in the code and read the comments. I made it as simple as I possibly could. Changing just 5 lines can redress the entire app.
 ![CLI Example Image](https://i.imgur.com/pU0TYCq.png "CLI Example")
 
 
