@@ -203,3 +203,20 @@ _ALT_BG     = _BG_BLACK
 ```
 
 ![Minimalist Example](https://i.imgur.com/Vt5d84L.png "Minimalist Theme")
+
+<br />
+
+### Snowballs
+
+```python
+_MAIN       = _FG_CYAN
+_BRIGHT_FG  = _FG_YELLOW
+_FG         = _FG_BLACK
+_BG         = _BG_MAGENTA
+_ALT_FG     = _FG_GREEN
+_ALT_BG     = _BG_BLACK
+```
+
+![Snowballs Example](https://i.imgur.com/XdZkHat.png "Snowballs Theme")
+
+
