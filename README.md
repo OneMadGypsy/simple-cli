@@ -91,6 +91,7 @@ _To discus features, bugs or share your own project that utilize code in this re
 3) `copy` will automatically list the parent directory of the destination file when the operation completes
 4) `/absolute/path`, `relative/path`, and `../relative path` are all supported
 5) wrap paths that contain spaces in quotes `'path/with space/file name.ext'`
+6) most operations can be performed from anywhere as long as the path argument(s) are correct
 
 <br />
  
