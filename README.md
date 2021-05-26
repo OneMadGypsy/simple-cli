@@ -1,6 +1,6 @@
 # simple-cli
 
-This is a very simple command line interface written in micropython. This simplifies a handful of filesystem operations on your device and any mounted drive that is connected to it, Currently, it is mostly a wrapper that turns `uos` into a list of commands, and formats, sorts and/or prunes it's return data, but it has a few other tricks that `uos` doesn't provide. This is only properly supported by a linux terminal. Windows will understand the formatting but interpret it differently. If you would like to retheme the interface it can be done easily by modifying lines 21 through 26. There are also some alternate theme ideas at [the bottom of this repo](https://github.com/OneMadGypsy/simple-cli/blob/main/README.md#theme-ideas).
+This is a very simple command line interface written in micropython. This simplifies a handful of filesystem operations on your device and any mounted drive that is connected to it, Currently, it is mostly a wrapper that turns `uos` into a list of commands, and formats, sorts and/or prunes it's return data, but it has a few other tricks that `uos` doesn't provide. This is only properly supported by a linux terminal. Windows will understand the formatting but interpret it differently. If you would like to retheme the interface it can be done easily by modifying lines 28 through 33. There are also some alternate theme ideas at [the bottom of this repo](https://github.com/OneMadGypsy/simple-cli/blob/main/README.md#theme-ideas).
 
 <br />
 
@@ -142,7 +142,7 @@ cli.irq(lambda p:CLI(user="yourName"), Pin.IRQ_FALLING) #on release
  
 ## Theme Ideas:
 
->Here are a few alternate themes that can be copy/pasted over lines 21 through 26. If you create an interesting theme [share it here](https://github.com/OneMadGypsy/simple-cli/discussions/1) so others can enjoy it.
+>Here are a few alternate themes that can be copy/pasted over lines 28 through 33. If you create an interesting theme [share it here](https://github.com/OneMadGypsy/simple-cli/discussions/1) so others can enjoy it.
 
 <br />
 
