@@ -73,7 +73,7 @@ _To discus features, bugs or share your own project that utilize code in this re
 **del**     | delete a file or folder      | del fileOrDirName                     | *no equivalent*
 **rename**  | rename a file                | rename oldname newname                | `uos.rename()`
 **find**    | find all with term from cwd  | find term                             | *no equivalent*
-**syspath** | print or [modify] syspath    | syspath [add, del]                    | `sys.path` [`.append()`, `.remove()`]
+**syspath** | print or [modify] syspath    | syspath [add, del]                    | `sys.path` [`.append`, `.remove`]
 **copy**    | copy a file                  | copy source destination [w, wb]       | *no equivalent*
 
 <br />
