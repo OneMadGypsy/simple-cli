@@ -1,21 +1,28 @@
 import uos
-from micropython import const
 from usys import path as syspath
+from ure import compile as urecompile
+from gc import collect as gccollect
+from time import localtime as tnow
+from time import time as ttime
+#from math import abs
  
+_QUOTED     = urecompile('([\'"]([^\'"]*)["\'])')
+
 #_> STAT BITMASKS
 _STAT_FLDR  = const(0x4000)
 _STAT_FILE  = const(0x8000)
 
 #_> Linux Terminal FOREGROUND BACKGROUND and MODIFIERS
-_NORMAL     = const(0)
-_FG_BLACK  , _BG_BLACK  , _BOLD       = const(30), const(40), const(1)
-_FG_RED    , _BG_RED    , _SHADE      = const(31), const(41), const(2)
-_FG_GREEN  , _BG_GREEN  , _ITALIC     = const(32), const(42), const(3)
-_FG_YELLOW , _BG_YELLOW , _UNDERLINE  = const(33), const(43), const(4)
-_FG_BLUE   , _BG_BLUE   , _BLINK      = const(34), const(44), const(5)
-_FG_MAGENTA, _BG_MAGENTA, _INVERSE    = const(35), const(45), const(7)
-_FG_CYAN   , _BG_CYAN   , _STRIKE     = const(36), const(46), const(9)
-_FG_WHITE  , _BG_WHITE  , _BOLD_ULINE = const(37), const(47), const(21)
+#_> We can't remove these if we make them `const`, and we are going to remove them
+_NORMAL = 0
+_FG_BLACK  , _BG_BLACK  , _BOLD       = 30, 40, 1
+_FG_RED    , _BG_RED    , _SHADE      = 31, 41, 2
+_FG_GREEN  , _BG_GREEN  , _ITALIC     = 32, 42, 3
+_FG_YELLOW , _BG_YELLOW , _UNDERLINE  = 33, 43, 4
+_FG_BLUE   , _BG_BLUE   , _BLINK      = 34, 44, 5
+_FG_MAGENTA, _BG_MAGENTA, _INVERSE    = 35, 45, 7
+_FG_CYAN   , _BG_CYAN   , _STRIKE     = 36, 46, 9
+_FG_WHITE  , _BG_WHITE  , _BOLD_ULINE = 37, 47, 21
 
 #_> THEME ~ changing just these colors can retheme the entire app
 _MAIN       = _FG_CYAN  # HEADERS and CMDLINE (user@host:~/directory $)
@@ -31,28 +38,29 @@ _FMT2       = '\033[{};{}m'
 _FMT3       = '\033[{};{};{}m'
 _FMT4       = '\033[{};{};{};{}m'
 _COMBINE    = '{}{}'
-_FULLPATH   = '{}/{}'
 
 #_> STYLESHEET
-_E          = _FMT3.format(_BOLD, _BLINK, _FG_RED)                  # error
-_D          = _FMT1.format(_NORMAL)                                 # default
+_E          = _FMT2.format(_BOLD, _FG_RED)                          # error
+_W          = _FMT2.format(_BOLD, _FG_YELLOW)                       # warning
+_D          = _FMT1.format(_NORMAL)                                 # default ~ doesn't get removed
 _CH         = _FMT4.format(_BOLD_ULINE, _BOLD, _MAIN, _BG_BLACK)    # contrast header
 _C1         = _FMT3.format(_BOLD  , _BRIGHT_FG, _BG    )            # contrast 1
 _C1_        = _FMT3.format(_NORMAL,        _FG, _BG    )            # subcontrast 1
 _C2         = _FMT3.format(_BOLD  , _BRIGHT_FG, _ALT_BG)            # contrast 2
 _C2_        = _FMT3.format(_NORMAL,    _ALT_FG, _ALT_BG)            # subcontrast 2
 
+
+_NOW        = '\n{} System Time:{}{} {} {}\n'.format(_C1, _D, _C1_, '{}/{:02}/{:02} {:02}:{:02}:{:02}', _D)
+
 #__> entry
 _EHEADER    = '\n{} {:<25} {} {} {:<12} {}'.format(_CH, 'files', _D, _CH,'byte size', _D)
-_ENTRY      = '{} {} {} {} {} {}'
-_ENTRIES    = (_ENTRY.format(_C1, '{:<25}', _D, _C1_, '{:>12}', _D),
-               _ENTRY.format(_C2, '{:<25}', _D, _C2_, '{:>12}', _D))
+_ENTRIES    = ('{} {} {} {} {} {}'.format(_C1, '{:<25}', _D, _C1_, '{:>12}', _D),
+               '{} {} {} {} {} {}'.format(_C2, '{:<25}', _D, _C2_, '{:>12}', _D))
 
 #__> help
 _HHEADER    = '\n{} {:<8} {} {} {:<30} {} {} {:<33} {}'.format(_CH, 'cmd', _D, _CH,'description', _D, _CH, 'example', _D)
-_HELP       = '{} {} {} {} {} {} {} {} {}'
-_HELPS      = (_HELP.format(_C1, '{:<8}', _D, _C1_, '{:<30}', _D, _C1_, '{:<33}', _D),
-               _HELP.format(_C2, '{:<8}', _D, _C2_, '{:<30}', _D, _C2_, '{:<33}', _D))
+_HELPS      = ('{} {} {} {} {} {} {} {} {}'.format(_C1, '{:<8}', _D, _C1_, '{:<30}', _D, _C1_, '{:<33}', _D),
+               '{} {} {} {} {} {} {} {} {}'.format(_C2, '{:<8}', _D, _C2_, '{:<30}', _D, _C2_, '{:<33}', _D))
 
 #_> sysinfo
 _SHEADER    = '\n{} {:<77}{}'.format(_CH, 'sysinfo', _D)
@@ -62,27 +70,43 @@ _SYSINFO2   = '{} {}{} {} {}{}'.format(_C2, '{:<8}', _D, _C2_, '{:<67}', _D)
 #_> print
 _FILE       = '\n{} {}{} bytes {}'.format(_CH, {}, '{:>50}', _FMT3.format(_NORMAL, _FG_WHITE, _BG_BLACK))
 
-#_> find
+#_> generic one column
 _IHEADER    = '\n{} {}{}'.format(_CH, '{:<47}', _D)
-_ITEM       = '{} {}{}'
-_ITEMS      = (_ITEM.format(_C1, '{:<47}', _D),
-               _ITEM.format(_C2, '{:<47}', _D))
+_ITEMS      = ('{} {}{}'.format(_C1, '{:<47}', _D),
+               '{} {}{}'.format(_C2, '{:<47}', _D))
 
 #_> continuous
-_GHEADER    = '\n{} {:<77}{}'.format(_CH, 'sysinfo', _D)
+_TWARNING    = '\n{} Command ({}) for use with {} only! {}\n'.format(_W, '{}', '{}', _D)
+_EWARNING    = '\n{} Command ({}) does not exist! {}\n'.format(_W, '{}', _D)
 _ERROR      = '\n{}{} {} ({}) {}\n'.format(_E, '{}', '{}', '{}', _D)
 _CMDLINE    = '{}{}{}:{}{} $ {}'.format(_FMT2.format(_BOLD, _MAIN), '{}@{}', _D, _FMT3.format(_BOLD, _SHADE, _MAIN), '~{}', _D)
 
 #__> CLI
-_CMDS       = ('exit', 'help', 'sysinfo', 'list', 'clr', 'cd', 'print', 'mkdir', 'del', 'rename', 'find', 'syspath')
+_CMDS       = ('exit', 'help', 'sysinfo', 'clr', 'now', 'list', 'cd', 'print', 'mkdir', 'del', 'rename', 'find', 'syspath', 'copy')
 _AUTOLIST   = ('mkdir', 'del', 'rename', 'cd')
+_FILEONLY   = ('copy', 'print', 'rename')
+_FLDRONLY   = ('list', 'cd')
 
-_DESC       = ('exit the CLI', 'prints this help info', 'print system info', 'lists the current directory', 'clear the terminal', 
-               'change directory', 'print requested file','creates a new directory', 'delete a file or folder', 'rename a file', 
-               'find all with term from cwd', 'print or [modify] syspath')
-_EXS        = ('', '', '', '', '', 'cd path', 'print fileName [r | rb]', 'mkdir dirName', 'del fileOrDirName', 'rename oldname newname', 'find term', 'syspath [add | del]')
+_DESC       = ('exit the CLI', 'prints this help info', 'print system info', 'clear the terminal', 'prints system time', 
+               'lists the current directory', 'change directory', 'print requested file','creates a new directory', 'delete a file or folder', 'rename a file', 
+               'find all with term from cwd', 'print or [modify] syspath', 'copy a file')
+_EXS        = ('', '', '', '', '', 'list [path]', 'cd path', 'print fileName [r | rb]', 'mkdir dirName', 'del fileOrDirName', 'rename oldname newname',
+               'find term', 'syspath [add | del]', 'copy source destination [w | wb]')
 
-      
+_PATH_ERR   = 'Path Error:'
+_DEL_ERR    = 'Cannot Delete:' 
+
+#__> ALL FORMATS ARE CREATED. REMOVE DEAD WEIGHT AND RECLAIM MEMORY
+del urecompile
+del _FMT1, _FMT2, _FMT3, _FMT4 
+del _E, _W, _CH, _C1, _C1_, _C2, _C2_
+del _MAIN, _BRIGHT_FG, _FG, _BG, _ALT_FG, _ALT_BG, 
+del _FG_BLACK, _FG_RED, _FG_GREEN, _FG_YELLOW, _FG_BLUE, _FG_MAGENTA, _FG_CYAN, _FG_WHITE
+del _BG_BLACK, _BG_RED, _BG_GREEN, _BG_YELLOW, _BG_BLUE, _BG_MAGENTA, _BG_CYAN, _BG_WHITE
+del _NORMAL, _BOLD, _SHADE, _ITALIC, _UNDERLINE, _BLINK, _INVERSE, _STRIKE, _BOLD_ULINE 
+gccollect()
+
+
 class CLI(object):
     #__> COMMAND LINE INTERFACE
     def __init__(self, clear:bool=True, user:str='user') -> None:
@@ -91,39 +115,81 @@ class CLI(object):
         CLI.__list(uos.getcwd())
         
         while True:
-            args = input(_CMDLINE.format(user, host, uos.getcwd())).split(' ')
+            args = input(_CMDLINE.format(user, host, uos.getcwd()))
+            
+            if not args:
+                continue
+            
+            args = CLI.__tokenize(args).split(' ')
             cmd  = args.pop(0)
+            
+            if not cmd in _CMDS:
+                print(_EWARNING.format(cmd))
+                continue
+            
             term = uos.getcwd() if len(args) < 1 else args.pop(0)
-            alt  = None         if len(args) < 1 else args.pop(0)
+            foo  = None         if len(args) < 1 else args.pop(0)    # contextual
+            bar  = None         if len(args) < 1 else args.pop(0)    # contextual
+            path = CLI.__fullpath(term)
             
             try:
-                mode = uos.stat(term)[0]
+                mode = uos.stat(path)[0]
             except OSError as err:
-                if   cmd == 'mkdir'  : uos.mkdir(term)
-                elif cmd == 'find'   : (print(_IHEADER.format('found')), CLI.__find(term), print())
+                if   cmd == 'mkdir'  : uos.mkdir(path)
+                elif cmd == 'find'   :
+                    print(_IHEADER.format('found'))
+                    CLI.__find(term.replace('%20', ' '))
+                    print()
+                    continue
                 elif cmd == 'syspath': 
-                    CLI.__syspath(term, alt)
+                    CLI.__syspath(term, foo)                         #add or del
                     continue
                 else:
-                    full_path = _FULLPATH.format(uos.getcwd, term).replace('//', '/')
-                    print(_ERROR.format('Path Error', full_path, err))
+                    print(_ERROR.format(_PATH_ERR, path, err))
                     continue
+                    
+            if cmd in _FILEONLY and (mode & _STAT_FLDR):
+                print(_TWARNING.format(cmd, 'file'))
+                continue
+            elif cmd in _FLDRONLY and (mode & _STAT_FILE):
+                print(_TWARNING.format(cmd, 'directory'))
+                continue
                     
             if cmd in _CMDS:
                 if   cmd == 'exit'   : break
                 elif cmd == 'clr'    : print('\n'*100)
+                elif cmd == 'now'    : print(_NOW.format(*tnow(ttime())[:6]))
                 elif cmd == 'help'   : CLI.__help()
                 elif cmd == 'sysinfo': CLI.__sysinfo()
-                elif cmd == 'del'    : CLI.__delete(term, mode)
-                elif cmd == 'syspath': CLI.__syspath(term, alt)
-                elif cmd == 'list'   : CLI.__list(term)              if mode & _STAT_FLDR else None
-                elif cmd == 'print'  : CLI.__print(term, alt)        if mode & _STAT_FILE else None
-                elif cmd == 'cd'     : uos.chdir(term)               if mode & _STAT_FLDR else None
-                elif cmd == 'rename' : uos.rename(term, alt) if alt and mode & _STAT_FILE else None
-                    
+                elif cmd == 'syspath': CLI.__syspath(None, None)     #print
+                elif cmd == 'copy'   : CLI.__copy(path, foo, bar)    if mode & _STAT_FILE else None
+                elif cmd == 'list'   : CLI.__list(path)              if mode & _STAT_FLDR else None
+                elif cmd == 'print'  : CLI.__print(path, foo)        if mode & _STAT_FILE else None
+                elif cmd == 'cd'     : uos.chdir(path)               if mode & _STAT_FLDR else None
+                elif cmd == 'rename' : uos.rename(path, foo) if foo and mode & _STAT_FILE else None
+                elif cmd == 'del'    : 
+                    uos.chdir('/'.join(path.split('/')[0:-1]))       #goto parent directory
+                    CLI.__delete(path, mode)
+            
+                
             if cmd in _AUTOLIST:
                 CLI.__list(uos.getcwd())
                 
+        gccollect() #clean up before leaving
+                
+    #__> Tokenize Quoted Strings So They Don't Get Split On Space  
+    @staticmethod
+    def __tokenize(args):
+        m, g, n = _QUOTED.search(args), [], 0
+        while m:
+            n += m.end()
+            g.append(m.groups())
+            m = _QUOTED.search(args[n:])
+            
+        for a, b in g:
+            args = args.replace(a, b.replace(' ', '%20'))
+        
+        return args
       
     #__> Reads And Yields A File In 512 Byte Chunks
     @staticmethod
@@ -132,8 +198,7 @@ class CLI(object):
         try:
             file = open(path, 'rb')
         except OSError as err:
-            full_path = _FULLPATH.format(uos.getcwd(), item).replace('//', '/')
-            print(_ERROR.format('Path Error', full_path, err))
+            print(_ERROR.format(_PATH_ERR, CLI.__fullpath(path), err))
             return None
         
         while True:
@@ -144,6 +209,26 @@ class CLI(object):
                 break;
                 
         return None
+        
+    #__> Try To Determine Absolute Path
+    @staticmethod
+    def __fullpath(path:str) -> str:
+        path = path.replace('%20', ' ')
+        if path[0] == '/': #considered absolute
+            return path
+            
+        #else considered relative
+        head = [d for d in uos.getcwd().split('/') if d]
+        tail = []
+        
+        for d in path.split('/'):
+            if d == '..':
+                head.pop() if len(head) else None
+            else: tail.append(d)
+            
+        full_path = r'/{}'.format('/'.join(head+tail))
+        
+        return full_path
     
     #__> Sorts A List By Directories First Plus Alphabetical First Letter Plus Name Length
     @staticmethod            
@@ -167,31 +252,57 @@ class CLI(object):
             print(_HELPS[n%2].format(cmd, desc, (ex if len(ex) else '')))
         print()
         
+    #__> Copy A File To A Destination Path And List Destination Directory When Copy Is Complete
+    @staticmethod
+    def __copy(source:str, dest:str, fmt:str) -> None:
+        dest = CLI.__fullpath(dest)
+        fmt  = 'w' if fmt is None or fmt == 'w' else 'wb'
+        fmt2 = 'r' if fmt == 'w' else 'rb'
+        
+        try:
+            with open(dest, fmt) as out:
+                for output in CLI.__read(source, fmt2):
+                    if not output is None:
+                        out.write(output)
+        except OSError as err:
+            print(_ERROR.format(_PATH_ERR, 'source: {} destination: {}'.format(source, dest), err))
+        
+        #list parent directory of new copy
+        dest = '/'.join(dest.split('/')[0:-1])
+        try:    
+            uos.chdir(dest)
+            CLI.__list(dest)
+        except OSError as err:
+            print(_ERROR.format(_PATH_ERR, dest, err))
+        
+                    
     #__> Lists The Contents Of The Supplied Path
     @staticmethod
     def __list(path:str) -> None:
         print(_EHEADER)
-        fs = uos.listdir(path)
-        fs.sort(reverse=False, key=CLI.__dirsort)
-        svi = 0
-        for n, item in enumerate(fs):
-            mode, size  = uos.stat(item)[0], uos.stat(item)[6]
-            if mode & _STAT_FLDR:
-                if item != "System Volume Information":
-                    print(_ENTRIES[(n+svi)%2].format(item+'/', ''))
+        try:
+            fs = uos.listdir(path)
+            fs.sort(reverse=False, key=CLI.__dirsort)
+            svi = 0
+            for n, item in enumerate(fs):
+                mode, size  = uos.stat(item)[0], uos.stat(item)[6]
+                if mode & _STAT_FLDR:
+                    if item != "System Volume Information":
+                        print(_ENTRIES[(n+svi)%2].format(item+'/', ''))
+                    else:
+                        svi = 1
                 else:
-                    svi = 1
-            else:
-                print(_ENTRIES[(n+svi)%2].format(item, size))
-        print()
+                    print(_ENTRIES[(n+svi)%2].format(item, size))
+            print()
+        except OSError as err:
+            print(_ERROR.format(_PATH_ERR, path, err))
     
     #__> Prints The Contents Of The supplied Path   
     @staticmethod
     def __print(path:str, fmt:str) -> None:
-        fmt = fmt if fmt else 'r'
         hold = ''
-        full_path = _FULLPATH.format(uos.getcwd(), path).replace('//', '/')
-        print(_FILE.format(full_path, uos.stat(path)[6]))
+        fmt  = fmt if fmt else 'r'
+        print(_FILE.format(path, uos.stat(path)[6]))
         for output in CLI.__read(path, fmt):
             if not output is None:
                 #__> New Line Juggler
@@ -201,12 +312,11 @@ class CLI(object):
                 hold = output[n+1:] if n < L else ''                            #right side of last \n if \n
                 if out:
                     print(out)      #print up to last \n if \n (and provides previous "last \n" via behavior)
-        print(_D)
+        print(_D) # this is why _D doesn't get removed putting an equivalent here is no different than keeping _D
 
     #__> Recursively Deletes Directories And Contents Side-stepping EACCESS Issues With Populated Directories
     @staticmethod
     def __delete(path:str, mode:int) -> None:
-        info = ''
         try:
             if mode & _STAT_FILE:
                 uos.remove(path)
@@ -219,41 +329,41 @@ class CLI(object):
                 uos.chdir(cwd)
                 uos.rmdir(path)
         except OSError as err:
-            full_path = _FULLPATH.format(uos.getcwd(), item).replace('//', '/')
-            print(_ERROR.format('Cannot Delete', full_path, err))
+            print(_ERROR.format(_DEL_ERR, path, err))
       
     #__> Find All Items Containing Term Recursing from CWD
     @staticmethod
-    def __find(term:str, i:int=0) -> None:
+    def __find(term:str, r:int=1) -> int:
         cwd = uos.getcwd()
-        for n, item in enumerate(uos.listdir()):
-            full_path = _FULLPATH.format(cwd, item).replace('//', '/')
+        for item in uos.listdir():
+            ip = CLI.__fullpath(item)
             if term in item:
-                print(_ITEMS[(n+i)%2].format(full_path))
-            uos.chdir(cwd)
-            if uos.stat(item)[0] & _STAT_FLDR:
-                uos.chdir(item)
-                CLI.__find(term, n+i)
-        uos.chdir(cwd)
+                r = not r
+                print(_ITEMS[r].format(ip))
+            if uos.stat(ip)[0] & _STAT_FLDR:
+                uos.chdir(ip)
+                r = CLI.__find(term, r)
+                uos.chdir(cwd)
+        return r
         
-    #__> Pring, Add or Remove From Syspath
+    #__> Print, Add or Remove Applied To sys.path
     @staticmethod
     def __syspath(term:str, path:str) -> None:
-        if term in ('add', 'del'):
+        if term in ('add', 'del') and path:
+            path = CLI.__fullpath(path)
+            try:
+                if uos.stat(path)[0] & _STAT_FLDR and not path in syspath:
+                    if   term == 'add': syspath.append(path)
+                    elif term == 'del': syspath.remove(path)
+            except OSError as err:
+                print(_ERROR.format(_PATH_ERR, path, err))
+                return
+                   
+        print(_IHEADER.format('syspaths'))
+        r = 1;
+        for path in syspath:
             if path:
-                full_path = _FULLPATH.format(uos.getcwd(), path).replace('//', '/')
-                try:
-                    if uos.stat(full_path)[0] & _STAT_FLDR:
-                        if   term == 'add': syspath.append(full_path)
-                        elif term == 'del': syspath.remove(full_path)
-                except OSError as err:
-                    print(_ERROR.format('Bad Path', full_path, err))
-        else:            
-            print(_IHEADER.format('syspaths'))
-            for n, path in enumerate(syspath):
-                print(_ITEMS[n%2].format(path))
-            print()
-        
-        
-        
-        
+                r = not r
+                print(_ITEMS[r].format(path))
+        print()
+
