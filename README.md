@@ -63,20 +63,34 @@ _To discus features, bugs or share your own project that utilize code in this re
 ------------|------------------------------|---------------------------------------|---------------------------------------
 **exit**    | exit the CLI                 |                                       | *no equivalent*
 **help**    | prints this help info        |                                       | *no equivalent*
+**now**     | prints system timestamp      |                                       | `localtime(time())`
 **sysinfo** | prints system info           |                                       | `uos.uname()`   (*pruned*)
-**list**    | lists the current directory  |                                       | `uos.listdir()` (*sorted*)
 **clr**     | clear the terminal           |                                       | *no equivalent*
+**list**    | lists the current directory  | list [path]                           | `uos.listdir()` (*sorted*)
 **cd**      | change directory             | cd path                               | `uos.chdir()`
 **print**   | print requested file         | print fileName [r, rb]                | *no equivalent*
 **mkdir**   | creates a new directory      | mkdir dirName                         | `uos.mkdir()`
 **del**     | delete a file or folder      | del fileOrDirName                     | *no equivalent*
 **rename**  | rename a file                | rename oldname newname                | `uos.rename()`
 **find**    | find all with term from cwd  | find term                             | *no equivalent*
-**syspath** | print or [modify] syspath    | syspath [add, del] [directory]        | `sys.path` [`.append()`, `.remove()`]
+**syspath** | print or [modify] syspath    | syspath [add, del]                    | `sys.path` [`.append()`, `.remove()`]
+**copy**    | copy a file                  | copy source destination [w, wb]       | *no equivalent*
 
 <br />
 
-**`cd`, `mkdir`, `del` and `rename` will automatically list the current directory when their operation completes** 
+-------
+
+<br />
+
+## Info
+
+<br />
+
+1) `cd`, `mkdir`, `del` and `rename` will automatically list the current directory when their operation completes
+2) `sypath` will automatically list all paths when an `add` or `del` operation completes
+3) `copy` will automatically list the parent directory of the destination file when the operation completes
+4) `/absolute/path`, `relative/path`, and `../relative path` are all supported
+5) wrap paths that contain spaces in quotes `'path/with space/file name.ext'`
 
 <br />
  
