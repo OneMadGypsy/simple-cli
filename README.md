@@ -59,23 +59,23 @@ _To discus features, bugs or share your own project that utilize code in this re
  
  <br />
 
- Cmd        | Description                  | Examples                              | Same As
-------------|------------------------------|---------------------------------------|---------------------------------------
-**exit**    | exit the CLI                 |                                       | *no equivalent*
-**help**    | prints this help info        |                                       | *no equivalent*
-**clr**     | clear the terminal           |                                       | `print('\n'*100)`
-**now**     | prints system timestamp      |                                       | `utime.localtime(utime.time())`
-**sysinfo** | prints system info           |                                       | *no equivalent*
-**collect** | run garbage collection       |                                       | `gc.collect()`
-**list**    | lists the current directory  | list [path]                           | `uos.listdir()` (*sorted*)
-**cd**      | change directory             | cd path                               | `uos.chdir()`
-**print**   | print requested file         | print fileName [r, rb]                | *no equivalent*
-**mkdir**   | creates a new directory      | mkdir dirName                         | `uos.mkdir()`
-**del**     | delete a file or folder      | del fileOrDirName                     | *no equivalent*
-**rename**  | rename a file                | rename oldname newname                | `uos.rename()`
-**find**    | find all with term from cwd  | find term                             | *no equivalent*
-**syspath** | print or [modify] syspath    | syspath [add, del]                    | `sys.path` [`.append()`, `.remove()`]
-**copy**    | copy a file                  | copy source destination [w, wb]       | *no equivalent*
+ Cmd        | Description                  | Examples                       | Equivalent
+------------|------------------------------|--------------------------------|---------------------------------------
+**exit**    | exit the CLI                 |                                | *no equivalent*
+**help**    | prints this help info        |                                | *no equivalent*
+**clr**     | clear the terminal           |                                | `print('\n'*100)`
+**now**     | prints system timestamp      |                                | `utime.localtime(utime.time())`
+**sysinfo** | prints system info           |                                | *no equivalent*
+**collect** | run garbage collection       |                                | `gc.collect()`
+**list**    | lists the current directory  | list [path]                    | `uos.listdir()` (*sorted*)
+**cd**      | change directory             | cd path                        | `uos.chdir()`
+**print**   | print requested file         | print fileName [r, rb]         | *no equivalent*
+**mkdir**   | creates a new directory      | mkdir dirName                  | `uos.mkdir()`
+**del**     | delete a file or folder      | del fileOrDirName              | *no equivalent*
+**rename**  | rename a file                | rename oldname newname         | `uos.rename()`
+**find**    | find all with term from cwd  | find term                      | *no equivalent*
+**syspath** | print or [modify] syspath    | syspath [add, del]             | `sys.path` [`.append()`, `.remove()`]
+**copy**    | copy a file                  | copy source dest [w, wb]       | *no equivalent*
 
 
 <br />
