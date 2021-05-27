@@ -147,10 +147,9 @@ cli.irq(lambda p:CLI(user="yourName"), Pin.IRQ_FALLING) #on release
 
 >Here are a few alternate themes that can be copy/pasted over lines 29 through 34. I don't take the below themes very seriously, They are provided more so you can understand how each property affects the appearance, and easily make a theme that you like. Themes, in general, were never intended to be a feature. The way I programmed this unintentionally made it very simple to change the appearance. Due to it's simplicity I decided to share the method. If you create an interesting theme [share it here](https://github.com/OneMadGypsy/simple-cli/discussions/1) so others can enjoy it.
 
+<br />
 
 >_These images are from an older version and do not reflect the current feature-set that is available. The main image for this repository is always current. Formatting has not changed, and all of these themes are still relevant._
-
-<br />
 
 ### Happy Jack
 
