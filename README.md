@@ -1,10 +1,10 @@
 # simple-cli
 
-This is a very simple command line interface written in micropython. This simplifies a handful of filesystem operations on your device and any mounted drive that is connected to it, Currently, it is mostly a wrapper that turns `uos` into a list of commands, and formats, sorts and/or prunes it's return data, but it has a few other tricks that `uos` doesn't provide. This is only properly supported by a linux terminal. Windows will understand the formatting but interpret it differently. If you would like to retheme the interface it can be done easily by modifying lines 28 through 33. There are also some alternate theme ideas at [the bottom of this repo](https://github.com/OneMadGypsy/simple-cli/blob/main/README.md#theme-ideas).
+This is a very simple command line interface written in micropython. This simplifies a handful of filesystem operations on your device and any mounted drive that is connected to it, Currently, it is mostly a wrapper that turns `uos` into a list of commands, and formats, sorts and/or prunes it's return data, but it has a few other tricks that `uos` doesn't provide. This is only properly supported by a linux terminal. Windows will understand the formatting but interpret it differently. If you would like to retheme the interface it can be done easily by modifying lines 29 through 34. There are also some alternate theme ideas at [the bottom of this repo](https://github.com/OneMadGypsy/simple-cli/blob/main/README.md#theme-ideas).
 
 <br />
 
-![CLI Example Image](https://i.imgur.com/aJYEYnx.png "CLI Example")
+![CLI Example Image](https://i.imgur.com/6ydXq9t.png "CLI Example")
 
 
 ### Community:
@@ -63,9 +63,10 @@ _To discus features, bugs or share your own project that utilize code in this re
 ------------|------------------------------|---------------------------------------|---------------------------------------
 **exit**    | exit the CLI                 |                                       | *no equivalent*
 **help**    | prints this help info        |                                       | *no equivalent*
-**now**     | prints system timestamp      |                                       | `localtime(time())`
-**sysinfo** | prints system info           |                                       | `uos.uname()`   (*pruned*)
-**clr**     | clear the terminal           |                                       | *no equivalent*
+**clr**     | clear the terminal           |                                       | `print('\n'*100)`
+**now**     | prints system timestamp      |                                       | `utime.localtime(utime.time())`
+**sysinfo** | prints system info           |                                       | *no equivalent*
+**collect** | run garbage collection       |                                       | `gc.collect()`
 **list**    | lists the current directory  | list [path]                           | `uos.listdir()` (*sorted*)
 **cd**      | change directory             | cd path                               | `uos.chdir()`
 **print**   | print requested file         | print fileName [r, rb]                | *no equivalent*
@@ -73,8 +74,9 @@ _To discus features, bugs or share your own project that utilize code in this re
 **del**     | delete a file or folder      | del fileOrDirName                     | *no equivalent*
 **rename**  | rename a file                | rename oldname newname                | `uos.rename()`
 **find**    | find all with term from cwd  | find term                             | *no equivalent*
-**syspath** | print or [modify] syspath    | syspath [add, del]                    | `sys.path` [`.append`, `.remove`]
+**syspath** | print or [modify] syspath    | syspath [add, del]                    | `sys.path` [`.append()`, `.remove()`]
 **copy**    | copy a file                  | copy source destination [w, wb]       | *no equivalent*
+
 
 <br />
 
@@ -142,7 +144,7 @@ cli.irq(lambda p:CLI(user="yourName"), Pin.IRQ_FALLING) #on release
  
 ## Theme Ideas:
 
->Here are a few alternate themes that can be copy/pasted over lines 28 through 33. If you create an interesting theme [share it here](https://github.com/OneMadGypsy/simple-cli/discussions/1) so others can enjoy it.
+>Here are a few alternate themes that can be copy/pasted over lines 29 through 34. If you create an interesting theme [share it here](https://github.com/OneMadGypsy/simple-cli/discussions/1) so others can enjoy it.
 
 <br />
 
