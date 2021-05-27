@@ -145,7 +145,7 @@ cli.irq(lambda p:CLI(user="yourName"), Pin.IRQ_FALLING) #on release
  
 ## Theme Ideas:
 
->Here are a few alternate themes that can be copy/pasted over lines 29 through 34. If you create an interesting theme [share it here](https://github.com/OneMadGypsy/simple-cli/discussions/1) so others can enjoy it.
+>Here are a few alternate themes that can be copy/pasted over lines 29 through 34. I don't take the below themes very seriously, They are provided more so you can understand how each property affects the appearance, and easily make a theme that you like. If you create an interesting theme [share it here](https://github.com/OneMadGypsy/simple-cli/discussions/1) so others can enjoy it.
 
 <br />
 
