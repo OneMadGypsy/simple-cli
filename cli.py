@@ -2,9 +2,10 @@ import uos
 from usys import path as syspath
 from ure import compile as urecompile
 from gc import collect as gccollect
+from gc import mem_free as gcmemfree
+from gc import mem_alloc as gcmemalloc
 from time import localtime as tnow
 from time import time as ttime
-#from math import abs
  
 _QUOTED     = urecompile('([\'"]([^\'"]*)["\'])')
 
@@ -37,25 +38,25 @@ _FMT1       = '\033[{}m'
 _FMT2       = '\033[{};{}m'
 _FMT3       = '\033[{};{};{}m'
 _FMT4       = '\033[{};{};{};{}m'
-_COMBINE    = '{}{}'
 
 #_> STYLESHEET
-_E          = _FMT2.format(_BOLD, _FG_RED)                          # error
-_W          = _FMT2.format(_BOLD, _FG_YELLOW)                       # warning
+_CH         = _FMT4.format(_BOLD_ULINE, _BOLD , _MAIN  , _BG_BLACK) # contrast header
 _D          = _FMT1.format(_NORMAL)                                 # default ~ doesn't get removed
-_CH         = _FMT4.format(_BOLD_ULINE, _BOLD, _MAIN, _BG_BLACK)    # contrast header
+_E          = _FMT2.format(_BOLD  , _FG_RED   )                     # error
+_W          = _FMT2.format(_BOLD  , _FG_YELLOW)                     # warning
 _C1         = _FMT3.format(_BOLD  , _BRIGHT_FG, _BG    )            # contrast 1
 _C1_        = _FMT3.format(_NORMAL,        _FG, _BG    )            # subcontrast 1
 _C2         = _FMT3.format(_BOLD  , _BRIGHT_FG, _ALT_BG)            # contrast 2
 _C2_        = _FMT3.format(_NORMAL,    _ALT_FG, _ALT_BG)            # subcontrast 2
 
-
-_NOW        = '\n{} System Time:{}{} {} {}\n'.format(_C1, _D, _C1_, '{}/{:02}/{:02} {:02}:{:02}:{:02}', _D)
+#__> time
+_SYSTIME    = '{}/{:02}/{:02} {:02}:{:02}:{:02}'
+_NOW        = '\n{} System Time:{}{} {} {}\n'.format(_C1, _D, _C1_, _SYSTIME, _D)
 
 #__> entry
-_EHEADER    = '\n{} {:<25} {} {} {:<12} {}'.format(_CH, 'files', _D, _CH,'byte size', _D)
-_ENTRIES    = ('{} {} {} {} {} {}'.format(_C1, '{:<25}', _D, _C1_, '{:>12}', _D),
-               '{} {} {} {} {} {}'.format(_C2, '{:<25}', _D, _C2_, '{:>12}', _D))
+_EHEADER    = '\n{} {:<26} {} {} {:<12} {}'.format(_CH, 'files', _D, _CH,'byte size', _D)
+_ENTRIES    = ('{} {} {} {} {} {}'.format(_C1, '{:<26}', _D, _C1_, '{:>12}', _D),
+               '{} {} {} {} {} {}'.format(_C2, '{:<26}', _D, _C2_, '{:>12}', _D))
 
 #__> help
 _HHEADER    = '\n{} {:<8} {} {} {:<30} {} {} {:<33} {}'.format(_CH, 'cmd', _D, _CH,'description', _D, _CH, 'example', _D)
@@ -63,34 +64,38 @@ _HELPS      = ('{} {} {} {} {} {} {} {} {}'.format(_C1, '{:<8}', _D, _C1_, '{:<3
                '{} {} {} {} {} {} {} {} {}'.format(_C2, '{:<8}', _D, _C2_, '{:<30}', _D, _C2_, '{:<33}', _D))
 
 #_> sysinfo
-_SHEADER    = '\n{} {:<77}{}'.format(_CH, 'sysinfo', _D)
-_SYSINFO1   = '{} {}{} {} {}{}'.format(_C1, '{:<8}', _D, _C1_, '{:<67}', _D)
-_SYSINFO2   = '{} {}{} {} {}{}'.format(_C2, '{:<8}', _D, _C2_, '{:<67}', _D)
+_SHEADER    = '\n{} {:<78}{}'.format(_CH, 'sysinfo', _D)
+_SYSINFO1   = '{} {}{} {} {}{}'.format(_C1, '{:<10}', _D, _C1_, '{:<66}', _D)
+_SYSINFO2   = '{} {}{} {} {}{}'.format(_C2, '{:<10}', _D, _C2_, '{:<66}', _D)
 
 #_> print
-_FILE       = '\n{} {}{} bytes {}'.format(_CH, {}, '{:>50}', _FMT3.format(_NORMAL, _FG_WHITE, _BG_BLACK))
+_FILE       = '\n{} {}{} bytes {}'.format(_CH, '{:<58}', '{:>13}', _FMT3.format(_NORMAL, _FG_WHITE, _BG_BLACK))
+_COMBINE    = '{}{}'
 
 #_> generic one column
-_IHEADER    = '\n{} {}{}'.format(_CH, '{:<47}', _D)
-_ITEMS      = ('{} {}{}'.format(_C1, '{:<47}', _D),
-               '{} {}{}'.format(_C2, '{:<47}', _D))
+_IHEADER    = '\n{} {}{}'.format(_CH, '{:<42}', _D)
+_ITEMS      = ('{} {}{}'.format(_C1, '{:<42}', _D),
+               '{} {}{}'.format(_C2, '{:<42}', _D))
 
 #_> continuous
-_TWARNING    = '\n{} Command ({}) for use with {} only! {}\n'.format(_W, '{}', '{}', _D)
-_EWARNING    = '\n{} Command ({}) does not exist! {}\n'.format(_W, '{}', _D)
+_TWARNING   = '\n{} Command ({}) for use with {} only! {}\n'.format(_W, '{}', '{}', _D)
+_EWARNING   = '\n{} Command ({}) does not exist! {}\n'.format(_W, '{}', _D)
 _ERROR      = '\n{}{} {} ({}) {}\n'.format(_E, '{}', '{}', '{}', _D)
 _CMDLINE    = '{}{}{}:{}{} $ {}'.format(_FMT2.format(_BOLD, _MAIN), '{}@{}', _D, _FMT3.format(_BOLD, _SHADE, _MAIN), '~{}', _D)
 
 #__> CLI
-_CMDS       = ('exit', 'help', 'sysinfo', 'clr', 'now', 'list', 'cd', 'print', 'mkdir', 'del', 'rename', 'find', 'syspath', 'copy')
+_CMDS       = ('exit', 'help', 'sysinfo', 'clr', 'now', 'collect', 'list', 'cd', 'print', 'mkdir', 'del', 'rename', 'find', 'syspath', 'copy')
 _AUTOLIST   = ('mkdir', 'del', 'rename', 'cd')
 _FILEONLY   = ('copy', 'print', 'rename')
 _FLDRONLY   = ('list', 'cd')
 
-_DESC       = ('exit the CLI', 'prints this help info', 'print system info', 'clear the terminal', 'prints system time', 
+#_> description
+_DESC       = ('exit the CLI', 'prints this help info', 'print system info', 'clear the terminal', 'prints system time', 'run garbage collection',
                'lists the current directory', 'change directory', 'print requested file','creates a new directory', 'delete a file or folder', 'rename a file', 
                'find all with term from cwd', 'print or [modify] syspath', 'copy a file')
-_EXS        = ('', '', '', '', '', 'list [path]', 'cd path', 'print fileName [r | rb]', 'mkdir dirName', 'del fileOrDirName', 'rename oldname newname',
+               
+#_> examples
+_EXS        = ('', '', '', '', '', '', 'list [path]', 'cd path', 'print fileName [r | rb]', 'mkdir dirName', 'del fileOrDirName', 'rename oldname newname',
                'find term', 'syspath [add | del]', 'copy source destination [w | wb]')
 
 _PATH_ERR   = 'Path Error:'
@@ -159,6 +164,7 @@ class CLI(object):
                 if   cmd == 'exit'   : break
                 elif cmd == 'clr'    : print('\n'*100)
                 elif cmd == 'now'    : print(_NOW.format(*tnow(ttime())[:6]))
+                elif cmd == 'collect': gccollect(), CLI.__sysinfo()
                 elif cmd == 'help'   : CLI.__help()
                 elif cmd == 'sysinfo': CLI.__sysinfo()
                 elif cmd == 'syspath': CLI.__syspath(None, None)     #print
@@ -170,7 +176,6 @@ class CLI(object):
                 elif cmd == 'del'    : 
                     uos.chdir('/'.join(path.split('/')[0:-1]))       #goto parent directory
                     CLI.__delete(path, mode)
-            
                 
             if cmd in _AUTOLIST:
                 CLI.__list(uos.getcwd())
@@ -235,13 +240,16 @@ class CLI(object):
     def __dirsort(item:str) -> int:
         return ((uos.stat(item)[0] & _STAT_FILE)*1000)+(ord(item[0])*10)+len(item)
     
-    #__> Prints System Info  
+    #__> Prints System Info And Other Related Information 
     @staticmethod
     def __sysinfo() -> None: 
         print(_SHEADER)
-        print(_SYSINFO1.format('sysname', uos.uname().sysname))
-        print(_SYSINFO2.format('machine', uos.uname().machine))
-        print(_SYSINFO1.format('upython', uos.uname().version))
+        print(_SYSINFO1.format('machine' , uos.uname().machine))
+        print(_SYSINFO2.format('sysname' , uos.uname().sysname))
+        print(_SYSINFO1.format('systime' , _SYSTIME.format(*tnow(ttime())[:6])))
+        print(_SYSINFO2.format('memalloc', gcmemalloc()))
+        print(_SYSINFO1.format('memfree' , gcmemfree()))
+        print(_SYSINFO2.format('upython' , uos.uname().version))
         print()
     
     #__> Prints The Help Info
@@ -261,9 +269,8 @@ class CLI(object):
         
         try:
             with open(dest, fmt) as out:
-                for output in CLI.__read(source, fmt2):
-                    if not output is None:
-                        out.write(output)
+                for output in CLI.__read(source, fmt2): 
+                    if not output is None: out.write(output)
         except OSError as err:
             print(_ERROR.format(_PATH_ERR, 'source: {} destination: {}'.format(source, dest), err))
         
@@ -274,7 +281,6 @@ class CLI(object):
             CLI.__list(dest)
         except OSError as err:
             print(_ERROR.format(_PATH_ERR, dest, err))
-        
                     
     #__> Lists The Contents Of The Supplied Path
     @staticmethod
@@ -346,7 +352,7 @@ class CLI(object):
                 uos.chdir(cwd)
         return r
         
-    #__> Print, Add or Remove Applied To sys.path
+    #__> Print And Add or Remove Applied To sys.path
     @staticmethod
     def __syspath(term:str, path:str) -> None:
         if term in ('add', 'del') and path:
