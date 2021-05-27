@@ -94,7 +94,7 @@ _To discus features, bugs or share your own project that utilize code in this re
 4) `/absolute/path`, `relative/path`, and `../relative path` are all supported
 5) wrap paths that contain spaces in quotes `'path/with space/file name.ext'`
 6) most operations can be performed from anywhere as long as the path argument(s) are correct
-7) `del` is nuclear! It is the equivalent of the linux command `sudo rm -r mydir`. You will not be asked if you are sure.
+7) `del` is nuclear! It is the equivalent of `sudo rm -r mydir`. You will not be asked if you are sure.
 
 <br />
  
