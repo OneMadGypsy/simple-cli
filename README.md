@@ -88,7 +88,7 @@ _To discus features, bugs or share your own project that utilize code in this re
 
 <br />
 
-1) `cd`, `mkdir`, `del` and `rename` will automatically list the current directory when their operation completes
+1) `cd`, `mkdir`, `del` and `rename` will automatically list the targeted directory when their operation completes
 2) `sypath` will automatically list all paths when an `add` or `del` operation completes
 3) `copy` will automatically list the parent directory of the destination file when the operation completes
 4) `/absolute/path`, `relative/path`, and `../relative path` are all supported
