@@ -151,8 +151,6 @@ cli.irq(lambda p:CLI(user="yourName"), Pin.IRQ_FALLING) #on release
 
 _these images are from an older version and do not reflect the current feature-set that is available_
 
-<br />
-
 ### Happy Jack
 
 ```python
