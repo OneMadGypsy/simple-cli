@@ -80,7 +80,8 @@ _ITEMS      = ('{} {}{}'.format(_C1, '{:<42}', _D),
 #_> continuous
 _TWARNING   = '\n{} Command ({}) for use with {} only! {}\n'.format(_W, '{}', '{}', _D)
 _EWARNING   = '\n{} Command ({}) does not exist! {}\n'.format(_W, '{}', _D)
-_ERROR      = '\n{}{} {} ({}) {}\n'.format(_E, '{}', '{}', '{}', _D)
+_ERROR      = '\n{} {} {}\n'.format(_E, '{}', _D)
+_OSERROR    = '\n{} {} {} ({}) {}\n'.format(_E, '{}', '{}', '{}', _D)
 _CMDLINE    = '{}{}{}:{}{} $ {}'.format(_FMT2.format(_BOLD, _MAIN), '{}@{}', _D, _FMT3.format(_BOLD, _SHADE, _MAIN), '~{}', _D)
 
 #__> CLI
@@ -150,7 +151,7 @@ class CLI(object):
                     CLI.__syspath(term, foo)                         #add or del
                     continue
                 else:
-                    print(_ERROR.format(_PATH_ERR, path, err))
+                    print(_OSERROR.format(_PATH_ERR, path, err))
                     continue
                     
             if cmd in _FILEONLY and (mode & _STAT_FLDR):
@@ -203,12 +204,16 @@ class CLI(object):
         try:
             file = open(path, 'rb')
         except OSError as err:
-            print(_ERROR.format(_PATH_ERR, CLI.__fullpath(path), err))
+            print(_OSERROR.format(_PATH_ERR, CLI.__fullpath(path), err))
             return None
         
         while True:
             buff = file.read(buffsize)
-            yield buff if format == 'rb' else buff.decode()
+            try:
+                yield buff if format == 'rb' else buff.decode()
+            except UnicodeError as err:
+                print(_ERROR.format('UnicodeError: this file needs to be read as bytes.\n Use the rb flag with print or the wb flag with copy.'))
+                return None
             if not buff:
                 file.close()
                 break;
@@ -272,7 +277,7 @@ class CLI(object):
                 for output in CLI.__read(source, fmt2): 
                     if not output is None: out.write(output)
         except OSError as err:
-            print(_ERROR.format(_PATH_ERR, 'source: {} destination: {}'.format(source, dest), err))
+            print(_OSERROR.format(_PATH_ERR, 'source: {} destination: {}'.format(source, dest), err))
         
         #list parent directory of new copy
         dest = '/'.join(dest.split('/')[0:-1])
@@ -280,7 +285,7 @@ class CLI(object):
             uos.chdir(dest)
             CLI.__list(dest)
         except OSError as err:
-            print(_ERROR.format(_PATH_ERR, dest, err))
+            print(_OSERROR.format(_PATH_ERR, dest, err))
                     
     #__> Lists The Contents Of The Supplied Path
     @staticmethod
@@ -301,7 +306,7 @@ class CLI(object):
                     print(_ENTRIES[(n+svi)%2].format(item, size))
             print()
         except OSError as err:
-            print(_ERROR.format(_PATH_ERR, path, err))
+            print(_OSERROR.format(_PATH_ERR, path, err))
     
     #__> Prints The Contents Of The supplied Path   
     @staticmethod
@@ -335,7 +340,7 @@ class CLI(object):
                 uos.chdir(cwd)
                 uos.rmdir(path)
         except OSError as err:
-            print(_ERROR.format(_DEL_ERR, path, err))
+            print(_OSERROR.format(_DEL_ERR, path, err))
       
     #__> Find All Items Containing Term Recursing from CWD
     @staticmethod
@@ -362,7 +367,7 @@ class CLI(object):
                     if   term == 'add': syspath.append(path)
                     elif term == 'del': syspath.remove(path)
             except OSError as err:
-                print(_ERROR.format(_PATH_ERR, path, err))
+                print(_OSERROR.format(_PATH_ERR, path, err))
                 return
                    
         print(_IHEADER.format('syspaths'))
