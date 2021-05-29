@@ -2,7 +2,7 @@
 
 This is a very simple command line interface written in micropython. It's main purpose is to serve as a terminal interface to perform filesystem and diagnostic operations on a mounted drive that is connected to your microcontroller. The formatting this app uses is only properly supported by a linux terminal. Windows will understand the formatting, but interpret it differently. If you would like to retheme the interface it can be done easily by modifying lines 29 through 34. There are also some alternate theme ideas at [the bottom of this repo](https://github.com/OneMadGypsy/simple-cli/blob/main/README.md#theme-ideas).
 
-If you are using a mounted drive with a Raspberry Pi Pico maybe you would be interested in my [pico-sd-card](https://github.com/OneMadGypsy/pico-sd-card) module. This cli app was 100% written because of my SD card module, and my desire to be able to interact with the card, directly from the Pico, in a more graphical way.
+If you are using a mounted drive with a Raspberry Pi Pico maybe you would be interested in my [pico-sd-card](https://github.com/OneMadGypsy/pico-sd-card) module. This cli app was 100% written because of my SD card module, and my desire to be able to interact with the card, directly from the Pico, in a more graphical way. Using the **loading external scripts** example under [Usage](https://github.com/OneMadGypsy/pico-sd-card#usage) as a base, you could actually put this cli app on the SD card and run it from there.
 
 <br />
 
